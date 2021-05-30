@@ -33,7 +33,8 @@ function App() {
   }
 
   function submit(){
-    const url = `https://wgeltmhfq2tk.cybozu.com/k/v1/record.json`
+    // const url = `http://localhost:3000/hello-world`
+    const url = 'https://first-project-9474-dev.twil.io/hello-world'
     axios.post( url,
         {"app": 3,
           "record":{
@@ -41,10 +42,9 @@ function App() {
             "value": q,
           },
           "answer":{
-            "value":"Pythonで追加したいテキスト"
+            "value":"未回答"
           }
-        }},
-        {"X-Cybozu-API-Token": "DZSTJA0kp27aS1N5FUUYezANkrEIsHOXFKlSIW3R"}
+        }}
     )
     .then(function (response) {
       console.log(response)
