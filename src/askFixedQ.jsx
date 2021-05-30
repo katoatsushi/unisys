@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import logo from './logo.svg';
-import './App.css';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -69,37 +72,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+export default　function AskDe() {
   const classes = useStyles();
-  const [q, setQ] = React.useState('');
+  const [data, setData] = React.useState('');
+  const [a, setA] = React.useState(false);
+  const [b, setB] = React.useState(false);
+  const [c, setC] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [fullfill, setFullfill] = React.useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   function handleTextChange(e){
-    setQ(e.target.value);
+    setData(e.target.value);
     setFullfill(true)
   }
-
+  function handleChangeA(e){
+      console.log({e})
+      setA(e.target.value);
+  }
+  function handleChangeB(e){
+      console.log({e})
+      setB(e.target.value);
+  }
+  function handleChangeC(e){
+      console.log({e})
+      setC(e.target.value);
+  }
   function submit(){
     if (!loading) {
       setSuccess(false);
       setLoading(true);
     }
     // const url = `http://localhost:3000/hello-world`
-    const url = 'https://first-project-9474-dev.twil.io/hello-world'
+    const url = 'https://first-project-9474-dev.twil.io/defalut_question'
+
     setFullfill(false)
     axios.post( url,
-        {"app": 3,
-          "record":{
-          "question":{
-            "value": q,
-          },
-          "answer":{
-            "value":"未回答"
-          }
-        }}
+
+        {
+            "app": 6,
+            "record":{
+                "aImpressions":{
+                    "value": data
+                },
+                "attend":{
+                    "value": a
+                },
+                "dom": {
+                    "value": b
+                },
+                "attend_for_new_comer": {
+                    "value": c
+                }
+            }
+        }
     )
     .then(function (response) {
       console.log(response)
@@ -125,14 +152,9 @@ function App() {
           <Typography variant="h6">
             UNISYS
           </Typography>
-          <div style={{marginLeft: 'auto'}}>
-          <Button variant="contained" color="secondary" style={{marginRight: 20}} href={`/question`} >
+          <Button variant="contained" color="secondary" style={{marginLeft: 'auto'}} href={`/question`} >
             全ての質問項目へ
           </Button>
-          <Button variant="contained" color="secondary"  href={`/ask/question`} >
-            その他アンケート
-          </Button>
-          </div>
         </Toolbar>
       </AppBar>
     </div>
@@ -141,11 +163,11 @@ function App() {
       <Grid container spacing={3} style={{marginTop: 50}}>
         <Grid item xs={3}/>
         <Grid item xs={12} sm={6}>
-         質問したい内容をお送りしてください
+         アンケートに答えてください
           <Paper className={classes.paper}>
             <TextField
               id="outlined-multiline-static"
-              label="何か疑問に思うことがあればお聞きください"
+              label="内定式の感想を教えてください"
               style={{width: '100%'}}
               multiline
               onChange={handleTextChange}
@@ -153,6 +175,25 @@ function App() {
               variant="outlined"
             />
           </Paper>
+            <FormControl component="fieldset">
+            <FormLabel component="legend">内定式に出席しましたか？</FormLabel>
+            <RadioGroup aria-label="gender" name="gender1" value={a} onChange={handleChangeA}>
+                <FormControlLabel value="1" control={<Radio />} label="はい" />
+                <FormControlLabel value="0" control={<Radio />} label="いいえ" />
+            </RadioGroup>
+
+            <FormLabel component="legend">独身寮への入力を希望しますか？</FormLabel>
+            <RadioGroup aria-label="gender" name="gender1" value={b} onChange={handleChangeB}>
+                <FormControlLabel value="1" control={<Radio />} label="はい" />
+                <FormControlLabel value="0" control={<Radio />} label="いいえ" />
+            </RadioGroup>
+
+            <FormLabel component="legend">新人研修座談会への出席について回答ください</FormLabel>
+            <RadioGroup aria-label="gender" name="gender1" value={c} onChange={handleChangeC}>
+                <FormControlLabel value="1" control={<Radio />} label="はい" />
+                <FormControlLabel value="0" control={<Radio />} label="いいえ" />
+            </RadioGroup>
+            </FormControl>
           <div className={classes.wrapper}>
             <Button variant="contained" color="primary" disabled={!fullfill} onClick={submit} style={{width: '100%'}}>
               アンケートを送信する
@@ -166,4 +207,3 @@ function App() {
   </>);
 }
 
-export default App;
