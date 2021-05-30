@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSnackbar } from 'notistack';
+import AllQuestion from './QuestionAll'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -124,6 +125,9 @@ function App() {
           <Typography variant="h6">
             UNISYS
           </Typography>
+          <Button variant="contained" color="secondary" style={{marginLeft: 'auto'}} href={`/question`} >
+            全ての質問項目へ
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
@@ -158,5 +162,3 @@ function App() {
 }
 
 export default App;
-
-
