@@ -55,9 +55,11 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     marginTop: theme.spacing(8),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -164,7 +166,15 @@ export default　function AskDe() {
         <Grid item xs={3}/>
         <Grid item xs={12} sm={6}>
          アンケートに答えてください
+
           <Paper className={classes.paper}>
+
+            <FormLabel component="legend">内定式に出席しましたか？</FormLabel>
+            <RadioGroup aria-label="gender" name="gender1" value={a} onChange={handleChangeA}>
+                <FormControlLabel value="1" control={<Radio />} label="はい" />
+                <FormControlLabel value="0" control={<Radio />} label="いいえ" />
+            </RadioGroup>
+
             <TextField
               id="outlined-multiline-static"
               label="内定式の感想を教えてください"
@@ -174,14 +184,7 @@ export default　function AskDe() {
               rows={9}
               variant="outlined"
             />
-          </Paper>
-            <FormControl component="fieldset">
-            <FormLabel component="legend">内定式に出席しましたか？</FormLabel>
-            <RadioGroup aria-label="gender" name="gender1" value={a} onChange={handleChangeA}>
-                <FormControlLabel value="1" control={<Radio />} label="はい" />
-                <FormControlLabel value="0" control={<Radio />} label="いいえ" />
-            </RadioGroup>
-
+            <br/>
             <FormLabel component="legend">独身寮への入力を希望しますか？</FormLabel>
             <RadioGroup aria-label="gender" name="gender1" value={b} onChange={handleChangeB}>
                 <FormControlLabel value="1" control={<Radio />} label="はい" />
@@ -193,7 +196,8 @@ export default　function AskDe() {
                 <FormControlLabel value="1" control={<Radio />} label="はい" />
                 <FormControlLabel value="0" control={<Radio />} label="いいえ" />
             </RadioGroup>
-            </FormControl>
+
+          </Paper>
           <div className={classes.wrapper}>
             <Button variant="contained" color="primary" disabled={!fullfill} onClick={submit} style={{width: '100%'}}>
               アンケートを送信する
