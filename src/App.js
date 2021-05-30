@@ -10,22 +10,71 @@ import './App.css';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonSuccess: {
+    backgroundColor: '#4DA7F0',
+    '&:hover': {
+      backgroundColor: '#4DA7F0',
+    },
+  },
+  submitButtonSuccess: {
+    backgroundColor: 'silver',
+    '&:hover': {
+      backgroundColor: 'silver',
+    },
+  },
+  fabProgress: {
+    color: '#4DA7F0',
+    position: 'absolute',
+    top: -6,
+    left: -6,
+    zIndex: 1,
+  },
+  buttonProgress: {
+    color: '#4DA7F0',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
   paper: {
-    // padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
 }));
 
 function App() {
   const classes = useStyles();
   const [q, setQ] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const [fullfill, setFullfill] = React.useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   function handleTextChange(e){
     setQ(e.target.value);
@@ -33,8 +82,13 @@ function App() {
   }
 
   function submit(){
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+    }
     // const url = `http://localhost:3000/hello-world`
     const url = 'https://first-project-9474-dev.twil.io/hello-world'
+    setFullfill(false)
     axios.post( url,
         {"app": 3,
           "record":{
@@ -48,8 +102,18 @@ function App() {
     )
     .then(function (response) {
       console.log(response)
+      setSuccess(true);
+      setLoading(false);
+      var message = "質問を登録しました"
+      enqueueSnackbar(message, { 
+          variant: 'success',
+      });
     }).catch(function (response) { 
       console.log(response)
+      var message = "エラーがおきました"
+      enqueueSnackbar(message, { 
+          variant: 'error',
+      });
     })
   }
 
@@ -68,8 +132,8 @@ function App() {
       <Grid container spacing={3} style={{marginTop: 50}}>
         <Grid item xs={3}/>
         <Grid item xs={12} sm={6}>
+         質問したい内容をお送りしてください
           <Paper className={classes.paper}>
-
             <TextField
               id="outlined-multiline-static"
               label="何か疑問に思うことがあればお聞きください"
@@ -80,9 +144,12 @@ function App() {
               variant="outlined"
             />
           </Paper>
-          <Button variant="contained" color="primary" disabled={!fullfill} onClick={submit} style={{width: '100%'}}>
-            アンケートを送信する
-          </Button>
+          <div className={classes.wrapper}>
+            <Button variant="contained" color="primary" disabled={!fullfill} onClick={submit} style={{width: '100%'}}>
+              アンケートを送信する
+            </Button>
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+          </div>
         </Grid>
         <Grid item xs={3}/>
       </Grid>
